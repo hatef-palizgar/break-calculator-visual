@@ -447,9 +447,9 @@ function generateCalculationSteps() {
             updateExplanationText(
                 `Distribution type: ${distributeTypeText} ${!window.isValidDistributeType ? '<strong>(Invalid distribution type)</strong>' : ''}<br><br>` +
                 `This determines how breaks will be positioned within the shift:<br>` +
-                `- BEGINNING: Breaks start from the beginning of the shift<br>` +
-                `- MIDDLE: Breaks are evenly distributed throughout the shift<br>` +
-                `- END: Breaks are positioned towards the end of the shift<br>` +
+                `- BEGINNING: Breaks start from the beginning of the shift and are evenly spaced until the end of the shift<br>` +
+                `- MIDDLE: Breaks are evenly distributed throughout the shift, with the first break positioned at the midpoint of the shift<br>` +
+                `- END: Breaks are positioned towards the end of the shift, with the first break positioned at a point that allows for even spacing until the end of the shift<br>` +
                 `- AFTER_HOURS: First break starts after a specified number of hours` +
                 `${!window.isValidDistributeType ? '<br><br><strong>Since the distribution type is invalid, the method will return without creating any breaks.</strong>' : ''}`,
                 5, calculationSteps.length
@@ -1174,7 +1174,7 @@ function validateWeekday() {
     }
     
     // Get the weekday of the shift start (0 = Sunday, 1 = Monday, etc.)
-    const shiftWeekday = shiftStart.getDay();
+    const shiftWeekday = shiftStart.getDay(); // 0 = Sunday, 1 = Monday, etc.
     
     // Check if selected weekday matches shift weekday
     if (selectedWeekday !== shiftWeekday) {
