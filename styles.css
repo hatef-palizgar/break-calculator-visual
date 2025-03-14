@@ -1,0 +1,507 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    overflow: hidden;
+}
+
+#container {
+    display: flex;
+    height: 100vh;
+}
+
+#visualization {
+    flex: 1;
+    position: relative;
+}
+
+#controls-panel {
+    width: 350px;
+    background-color: #fff;
+    padding: 15px;
+    overflow-y: auto;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: #2c3e50;
+}
+
+h2 {
+    font-size: 1.1rem;
+    margin: 12px 0 8px;
+    color: #3498db;
+}
+
+.description {
+    margin-bottom: 15px;
+    line-height: 1.4;
+    font-size: 0.9rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.input-group {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+label {
+    display: inline-block;
+    width: 45%;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+input, select {
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    margin-left: 10px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#step-explanation {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 12px;
+    border-radius: 5px;
+    max-width: 55%;
+    max-height: 65vh;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    display: none;
+    overflow: hidden;
+}
+
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 6px;
+}
+
+.step-counter {
+    font-weight: bold;
+    color: #3498db;
+    font-size: 0.9rem;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(52, 152, 219, 0.3);
+    border-radius: 50%;
+    border-top-color: #3498db;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+}
+
+.checkmark {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    position: relative;
+    margin-right: 8px;
+}
+
+.checkmark:after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    top: 2px;
+    left: 6px;
+    transform: rotate(45deg);
+}
+
+.pause-indicator {
+    display: none;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    margin-right: 8px;
+}
+
+.pause-indicator:before,
+.pause-indicator:after {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background-color: #f39c12;
+    position: absolute;
+}
+
+.pause-indicator:before {
+    left: 4px;
+}
+
+.pause-indicator:after {
+    right: 4px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.steps-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.steps-list.expanded {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.step-item {
+    padding: 6px 8px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.step-item:hover {
+    background-color: #f0f0f0;
+}
+
+.step-item.active {
+    background-color: #e3f2fd;
+}
+
+.step-title {
+    font-weight: 500;
+    margin-bottom: 2px;
+    font-size: 0.9rem;
+}
+
+.step-explanation {
+    font-size: 0.85rem;
+    color: #666;
+    padding: 4px 8px 4px 16px;
+    margin-top: 4px;
+    border-left: 2px solid #3498db;
+    display: none;
+    line-height: 1.3;
+}
+
+.step-item.active .step-explanation {
+    display: block;
+}
+
+.arrow-indicator {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-left: 8px;
+}
+
+.arrow-up {
+    border-bottom: 5px solid #3498db;
+}
+
+.arrow-down {
+    border-top: 5px solid #3498db;
+}
+
+.content {
+    max-height: calc(65vh - 40px);
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+/* Step explanation tooltip */
+.step-explanation {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    max-width: 80%;
+    font-size: 16px;
+    z-index: 1000;
+    display: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Step header with spinner and counter */
+.step-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    position: relative;
+}
+
+.step-counter {
+    margin-left: auto;
+}
+
+/* Arrow indicator for expandable/collapsible content */
+.arrow-indicator {
+    margin-left: 10px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    transition: transform 0.3s ease;
+}
+
+.arrow-up {
+    border-bottom: 10px solid gray;
+    transform: translateY(-2px);
+}
+
+.arrow-down {
+    border-top: 10px solid gray;
+    transform: translateY(2px);
+}
+
+/* Steps list container */
+.steps-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    margin-top: 10px;
+    opacity: 0;
+}
+
+.steps-list.expanded {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.step-item {
+    padding: 8px 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.step-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.step-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
+
+/* Spinner animation */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(3, 196, 225, 0.3);
+    border-radius: 50%;
+    border-top-color: #0ee624;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+}
+
+/* Checkmark styles */
+.checkmark {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    position: relative;
+    margin-right: 10px;
+}
+
+.checkmark:after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    top: 3px;
+    left: 7px;
+    transform: rotate(45deg);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    #container {
+        flex-direction: column;
+    }
+    
+    #controls-panel {
+        width: 100%;
+        height: 40%;
+        overflow-y: auto;
+    }
+    
+    #visualization {
+        height: 60%;
+    }
+}
+
+/* Play and Pause Icons */
+.icon-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2ecc71;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.icon-button:hover {
+    background-color: #27ae60;
+}
+
+.play-icon, .pause-icon {
+    display: block;
+    position: relative;
+    width: 0;
+    height: 0;
+}
+
+.play-icon {
+    border-style: solid;
+    border-width: 8px 0 8px 12px;
+    border-color: transparent transparent transparent white;
+    margin-left: 3px;
+}
+
+.pause-icon {
+    position: relative;
+    width: 12px;
+    height: 14px;
+}
+
+.pause-icon:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 14px;
+    background: white;
+}
+
+.pause-icon:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 14px;
+    background: white;
+}
+
+/* Pause Indicator */
+.pause-indicator {
+    display: none;
+    position: relative;
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+}
+
+.pause-indicator:before {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 14px;
+    background: #0ee624;
+    left: 2px;
+}
+
+.pause-indicator:after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 14px;
+    background: #0ee624;
+    right: 2px;
+}
+
+canvas {
+    display: block;
+}
+
+/* Input error styling */
+.input-error {
+    border: 2px solid #e74c3c !important;
+    background-color: rgba(231, 76, 60, 0.1) !important;
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.5) !important;
+}
+
+.input-error:focus {
+    outline-color: #e74c3c !important;
+}
+
+/* Add a tooltip-like appearance when hovering over error fields */
+.input-error:hover {
+    cursor: pointer;
+}
+
+/* Add a small red asterisk after labels of required fields */
+.input-group label.required:after {
+    content: " *";
+    color: #e74c3c;
+}

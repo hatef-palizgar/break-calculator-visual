@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Break Calculator Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/geometries/TextGeometry.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.7/build/dat.gui.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="container">
+        <div id="visualization"></div>
+        <div id="controls-panel">
+            <h1>Break Calculator Visualization</h1>
+            <div class="description">
+                <p>This visualization demonstrates how the BreakCalculator's <code>calculate</code> method works to distribute breaks within a shift.</p>
+            </div>
+            <div class="form-group">
+                <h2>Shift Configuration</h2>
+                <div class="input-group">
+                    <label for="shift-start" class="required">Shift Start:</label>
+                    <input type="datetime-local" id="shift-start" value="2025-03-14T08:00">
+                </div>
+                <div class="input-group">
+                    <label for="shift-end" class="required">Shift End:</label>
+                    <input type="datetime-local" id="shift-end" value="2025-03-14T16:00">
+                </div>
+                <div class="alert alert-danger" id="shift-validation-message" style="display: none;"></div>
+            </div>
+            <div class="form-group">
+                <h2>Break Rule Configuration</h2>
+                <div class="input-group">
+                    <label for="break-hours" class="required">Minimum Shift Length for Breaks (hours):</label>
+                    <input type="time" id="break-hours" value="04:00">
+                </div>
+                <div class="input-group">
+                    <label for="break-minutes">Break Minutes:</label>
+                    <input type="number" id="break-minutes" min="1" max="120" value="60">
+                </div>
+                <div class="input-group">
+                    <label for="number-of-breaks">Number of Breaks:</label>
+                    <input type="number" id="number-of-breaks" min="1" max="10" value="4">
+                </div>
+                <div class="input-group">
+                    <label for="distribute-type">Distribution Type:</label>
+                    <select id="distribute-type">
+                        <option value="1">MIDDLE</option>
+                        <option value="2">EVEN</option>
+                        <option value="3">AFTER_HOURS</option>
+                    </select>
+                </div>
+                <div class="input-group after-hours-group" style="display: none;">
+                    <label for="after-hours">After Hours:</label>
+                    <input type="time" id="after-hours" value="02:00">
+                </div>
+                <div class="input-group">
+                    <label for="weekday">Weekday:</label>
+                    <select id="weekday">
+                        <option value="-1">Any day</option>
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="0">Sunday</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="show-breaks">Show Breaks:</label>
+                    <input type="checkbox" id="show-breaks" checked>
+                </div>
+                <div class="validation-message" id="weekday-validation-message"></div>
+            </div>
+            <div class="form-group">
+                <h2>Visualization Controls</h2>
+                <div class="input-group">
+                    <label for="animation-speed">Animation Speed:</label>
+                    <input type="range" id="animation-speed" min="0.1" max="2" step="0.1" value="1">
+                </div>
+                <div class="input-group">
+                    <button id="calculate-btn">Calculate Breaks</button>
+                    <button id="reset-btn">Reset View</button>
+                </div>
+                <div class="input-group">
+                    <button id="play-animation-btn" class="icon-button"><i class="play-icon"></i></button>
+                    <button id="pause-animation-btn" class="icon-button"><i class="pause-icon"></i></button>
+                </div>
+            </div>
+            <div class="explanation">
+                <h2>Explanation</h2>
+                <div id="explanation-text">
+                    <p>Configure the shift and break rules, then click "Calculate Breaks" to see how breaks are distributed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="step-explanation"></div>
+    <script src="script.js"></script>
+</body>
+</html>
